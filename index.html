@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>鄭亦焜 Yi-Kun Cheng | 隨身數位醫療電子名片 Digital Business & ICE Card</title>
+  <!-- Google Fonts for Multi-language & Editorial Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. EARTH-TONE DESIGN TOKENS (大地色系高質感名片配色)
+       ========================================================================== */
+    :root {
+      --bg-primary: #F6F3EC;          /* 燕麥暖白 Oatmeal */
+      --bg-secondary: #EAE3D5;        /* 淺亞麻沙色 Warm Sand */
+      --card-surface: #FFFDF9;        /* 象牙米白 Ivory Card */
+      --card-back-surface: #FAF6EE;   /* 醫療面微暖米色 */
+      --border-warm: #DFD5C3;         /* 大地暖沙邊框 */
+      --border-strong: #C6B79E;       /* 琥珀沙深邊框 */
+
+      /* Earth Accents */
+      --accent-terracotta: #B86B4B;   /* 赤陶暖棕 Terracotta */
+      --accent-terracotta-dark: #944F32;
+      --accent-terracotta-soft: #F5E7E0;
+      --accent-sage: #556B53;         /* 鼠尾草深綠 Sage Green */
+      --accent-sage-soft: #E6EFE5;
+      --accent-gold: #C89D66;         /* 琥珀鎏金 Muted Gold */
+      --accent-gold-soft: #F9F1E4;
+
+      /* Clinical Alert */
+      --alert-crimson: #A8383B;       /* 磚紅急救警示 Brick Red */
+      --alert-bg: #FDF2F2;
+      --alert-border: #E6B9B9;
+
+      /* Text */
+      --text-primary: #2C2523;        /* 濃縮咖啡深炭色 Deep Espresso */
+      --text-secondary: #685E57;      /* 暖灰褐 Taupe */
+      --text-muted: #8C827A;          /* 淺焙石灰 Muted Stone */
+
+      /* Card Dimensions & Shadows */
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-card: 0 22px 48px -12px rgba(44, 37, 35, 0.14), 0 4px 16px -2px rgba(44, 37, 35, 0.06);
+      --shadow-soft: 0 8px 24px -6px rgba(44, 37, 35, 0.07);
+      --transition-smooth: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      background-image:
+        radial-gradient(at 15% 15%, rgba(184, 107, 75, 0.09) 0px, transparent 48%),
+        radial-gradient(at 85% 20%, rgba(85, 107, 83, 0.08) 0px, transparent 48%),
+        radial-gradient(at 50% 85%, rgba(200, 157, 102, 0.08) 0px, transparent 50%);
+      color: var(--text-primary);
+      font-family: 'Inter', 'Noto Sans TC', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans Thai', sans-serif;
+      line-height: 1.55;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==========================================================================
+       2. TOP BAR: 7-LANGUAGE SWITCHER & QUICK MODES
+       ========================================================================== */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(246, 243, 236, 0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-warm);
+      padding: 0.65rem 1rem;
+    }
+
+    .top-nav-inner {
+      max-width: 1020px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+    }
+
+    .lang-scroll {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      background: var(--bg-secondary);
+      padding: 0.28rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-warm);
+    }
+
+    .lang-pill {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      font-family: inherit;
+    }
+
+    .lang-pill:hover {
+      color: var(--text-primary);
+      background: rgba(255, 253, 249, 0.65);
+    }
+
+    .lang-pill.active {
+      background: var(--accent-terracotta);
+      color: #FFFDF9;
+      box-shadow: 0 2px 8px rgba(184, 107, 75, 0.35);
+    }
+
+    .top-tools {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .tool-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.42rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      border: 1px solid var(--border-strong);
+      background: var(--card-surface);
+      color: var(--text-primary);
+      font-family: inherit;
+    }
+
+    .tool-btn:hover {
+      background: var(--bg-secondary);
+      border-color: var(--accent-terracotta);
+    }
+
+    .tool-btn.active-bilingual {
+      background: var(--accent-sage);
+      color: #FFFDF9;
+      border-color: var(--accent-sage);
+    }
+
+    /* ==========================================================================
+       3. CENTER STAGE: DIGITAL BUSINESS & MEDICAL FLIP CARD
+       ========================================================================== */
+    .stage-wrapper {
+      max-width: 1020px;
+      margin: 1.6rem auto 0;
+      padding: 0 1.15rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Mode Switcher Pill Above Card */
+    .card-side-tabs {
+      display: inline-flex;
+      background: var(--bg-secondary);
+      padding: 0.32rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-soft);
+      gap: 0.3rem;
+    }
+
+    .side-tab-btn {
+      border: none;
+      background: transparent;
+      padding: 0.52rem 1.15rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: inherit;
+    }
+
+    .side-tab-btn.active-front {
+      background: var(--text-primary);
+      color: #FFFDF9;
+      box-shadow: 0 4px 12px rgba(44, 37, 35, 0.22);
+    }
+
+    .side-tab-btn.active-back {
+      background: var(--alert-crimson);
+      color: #FFFDF9;
+      box-shadow: 0 4px 12px rgba(168, 56, 59, 0.32);
+    }
+
+    /* 3D Perspective Container */
+    .card-scene {
+      width: 100%;
+      max-width: 520px;
+      perspective: 1600px;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-flipper {
+      position: relative;
+      width: 100%;
+      transition: transform 0.72s cubic-bezier(0.34, 1.45, 0.64, 1);
+      transform-style: preserve-3d;
+    }
+
+    .card-scene.is-flipped .card-flipper {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      width: 100%;
+      background: var(--card-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-face-front {
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-face-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      transform: rotateY(180deg);
+      background: var(--card-back-surface);
+      border: 2px solid var(--alert-border);
+    }
+
+    /* When flipped, let back face dictate height smoothly */
+    .card-scene.is-flipped .card-face-front {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .card-scene.is-flipped .card-face-back {
+      position: relative;
+      pointer-events: auto;
+    }
+
+    /* ==========================================================================
+       4. FRONT FACE DESIGN: PERSONAL DIGITAL BUSINESS CARD
+       ========================================================================== */
+    .front-banner {
+      height: 112px;
+      background: linear-gradient(135deg, #9A553B 0%, #B86B4B 48%, #C89D66 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 1rem 1.35rem;
+    }
+
+    /* Subtle geometric earth pattern on banner */
+    .front-banner::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      bottom: -45px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,253,249,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-badge-chip {
+      background: rgba(44, 37, 35, 0.28);
+      backdrop-filter: blur(6px);
+      color: #FFFDF9;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      border: 1px solid rgba(255, 253, 249, 0.25);
+    }
+
+    .flip-trigger-mini {
+      background: rgba(255, 253, 249, 0.92);
+      color: var(--alert-crimson);
+      border: none;
+      padding: 0.32rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      transition: var(--transition-smooth);
+      font-family: inherit;
+      z-index: 3;
+    }
+
+    .flip-trigger-mini:hover {
+      transform: translateY(-1px);
+      background: #FFFFFF;
+    }
+
+    .front-body {
+      padding: 0 1.6rem 1.65rem;
+      position: relative;
+    }
+
+    /* Avatar + Quick QR Row */
+    .avatar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: -44px;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .monogram-avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #2C2523, #463B37);
+      border: 4px solid var(--card-surface);
+      box-shadow: 0 8px 20px rgba(44, 37, 35, 0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #FFFDF9;
+      position: relative;
+    }
+
+    .monogram-hanzi {
+      font-family: 'Playfair Display', 'Noto Sans TC', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.05;
+      color: #F5E7E0;
+    }
+
+    .monogram-en {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--accent-gold);
+      margin-top: 2px;
+    }
+
+    .status-dot {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-sage);
+      border: 3px solid var(--card-surface);
+    }
+
+    .quick-top-actions {
+      display: flex;
+      gap: 0.45rem;
+    }
+
+    .icon-pill-btn {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      border-radius: 12px;
+      padding: 0.48rem 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: var(--transition-smooth);
+      font-family: inherit;
+    }
+
+    .icon-pill-btn:hover {
+      background: var(--accent-terracotta-soft);
+      border-color: var(--accent-terracotta);
+      color: var(--accent-terracotta-dark);
+    }
+
+    /* Identity Typography */
+    .identity-block h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+
+    .identity-role {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--accent-terracotta-dark);
+      margin-top: 0.25rem;
+    }
+
+    .identity-tagline {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      margin-top: 0.45rem;
+    }
+
+    /* Personal Biometric & Birth Pills on Front Card */
+    .personal-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 1rem 0 1.15rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px dashed var(--border-warm);
+    }
+
+    .info-chip {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-warm);
+      padding: 0.3rem 0.68rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .info-chip.blood {
+      background: var(--alert-bg);
+      border-color: var(--alert-border);
+      color: var(--alert-crimson);
+    }
+
+    .info-chip.sage {
+      background: var(--accent-sage-soft);
+      border-color: rgba(85, 107, 83, 0.25);
+      color: var(--accent-sage);
+    }
+
+    /* Contact Links List */
+    .contact-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      padding: 0.68rem 0.95rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    .contact-row:hover {
+      background: #EFE9DC;
+      border-color: var(--accent-terracotta);
+      transform: translateX(2px);
+    }
+
+    .contact-row-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .contact-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-terracotta-soft);
+      color: var(--accent-terracotta-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+
+    .contact-icon-box.sage {
+      background: var(--accent-sage-soft);
+      color: var(--accent-sage);
+    }
+
+    .contact-icon-box.gold {
+      background: var(--accent-gold-soft);
+      color: #8E652E;
+    }
+
+    .contact-meta {
+      min-width: 0;
+    }
+
+    .contact-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      display: block;
+    }
+
+    .contact-value {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .contact-action-hint {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--accent-terracotta);
+      flex-shrink: 0;
+    }
+
+    /* Bottom Primary CTAs on Front Card */
+    .front-cta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+
+    .btn-primary-earth {
+      background: var(--text-primary);
+      color: #FFFDF9;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 0.78rem 1rem;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      transition: var(--transition-smooth);
+      font-family: inherit;
+    }
+
+    .btn-primary-earth:hover {
+      background: var(--accent-terracotta-dark);
+      box-shadow: 0 6px 16px rgba(148, 79, 50, 0.28);
+    }
+
+    .btn-emergency-flip {
+      background: var(--alert-bg);
+      color: var(--alert-crimson);
+      border: 1.5px solid var(--alert-border);
+      border-radius: var(--radius-md);
+      padding: 0.78rem 1rem;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      transition: var(--transition-smooth);
+      font-family: inherit;
+    }
+
+    .btn-emergency-flip:hover {
+      background: var(--alert-crimson);
+      color: #FFFDF9;
+    }
+
+    /* ==========================================================================
+       5. BACK FACE DESIGN: PORTABLE EMERGENCY MEDICAL & ICE CARD
+       ========================================================================== */
+    .back-header {
+      background: linear-gradient(135deg, #9E2F32 0%, #B84A39 100%);
+      color: #FFFDF9;
+      padding: 1rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .back-header-left h2 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .back-header-left p {
+      font-size: 0.72rem;
+      opacity: 0.9;
+    }
+
+    .back-body {
+      padding: 1.25rem 1.45rem 1.5rem;
+    }
+
+    /* Patient Quick Bar on Back */
+    .med-patient-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 0.85rem;
+      margin-bottom: 0.9rem;
+      border-bottom: 1px solid var(--border-warm);
+    }
+
+    .med-patient-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .med-patient-sub {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    /* 4-Column Biometric Strip (Height, Weight, BMI/BSA, Blood) */
+    .biometric-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      .biometric-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .front-cta-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bio-cell {
+      background: var(--card-surface);
+      border: 1px solid var(--border-warm);
+      border-radius: 10px;
+      padding: 0.55rem 0.5rem;
+      text-align: center;
+    }
+
+    .bio-cell.blood-cell {
+      background: var(--alert-bg);
+      border-color: var(--alert-border);
+    }
+
+    .bio-cell-label {
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      display: block;
+    }
+
+    .bio-cell-val {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 2px;
+    }
+
+    .bio-cell.blood-cell .bio-cell-val {
+      color: var(--alert-crimson);
+    }
+
+    /* Critical Allergy Box on Back */
+    .back-allergy-box {
+      background: var(--alert-bg);
+      border: 1.5px solid var(--alert-border);
+      border-left: 5px solid var(--alert-crimson);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 0.95rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .back-box-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--alert-crimson);
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-allergy-items {
+      font-size: 0.83rem;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    /* Compact Medical Summary Blocks on Back */
+    .back-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-bottom: 0.95rem;
+    }
+
+    @media (max-width: 480px) {
+      .back-summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mini-med-card {
+      background: var(--card-surface);
+      border: 1px solid var(--border-warm);
+      border-radius: 10px;
+      padding: 0.68rem 0.85rem;
+    }
+
+    .mini-med-card h4 {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-terracotta-dark);
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .mini-med-card p {
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      line-height: 1.42;
+    }
+
+    /* Emergency Contact Call Banner on Back */
+    .ice-call-bar {
+      background: linear-gradient(135deg, #EDE5D5, #F6F1E6);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .ice-call-info {
+      font-size: 0.82rem;
+    }
+
+    .ice-call-info strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: 0.88rem;
+    }
+
+    .ice-call-btn {
+      background: var(--alert-crimson);
+      color: #FFFDF9;
+      text-decoration: none;
+      padding: 0.48rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      box-shadow: 0 4px 10px rgba(168, 56, 59, 0.28);
+    }
+
+    /* Bilingual Subtitle Helper */
+    .bilingual-sub {
+      display: block;
+      font-size: 0.73rem;
+      font-weight: 500;
+      color: var(--accent-terracotta);
+      margin-top: 0.1rem;
+    }
+
+    body.hide-bilingual .bilingual-sub {
+      display: none !important;
+    }
+
+    /* ==========================================================================
+       6. EXPANDABLE FULL MEDICAL RECORD DRAWER BELOW THE CARD
+       ========================================================================== */
+    .drawer-toggle-bar {
+      width: 100%;
+      max-width: 520px;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-Toggle-drawer {
+      width: 100%;
+      background: var(--card-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 0.9rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition-smooth);
+      font-family: inherit;
+    }
+
+    .btn-Toggle-drawer:hover {
+      border-color: var(--accent-terracotta);
+      background: #FAF6EE;
+    }
+
+    .full-record-drawer {
+      width: 100%;
+      display: none;
+      animation: fadeSlideDown 0.32s ease forwards;
+    }
+
+    .full-record-drawer.open {
+      display: block;
+    }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.15rem;
+    }
+
+    .col-6 { grid-column: span 6; }
+    .col-12 { grid-column: span 12; }
+
+    @media (max-width: 820px) {
+      .col-6 { grid-column: span 12; }
+    }
+
+    .detail-card {
+      background: var(--card-surface);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .detail-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.7rem;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-warm);
+    }
+
+    .detail-card-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .detail-item {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-warm);
+      border-radius: 10px;
+      padding: 0.75rem 0.95rem;
+    }
+
+    .detail-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+    }
+
+    .detail-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      background: var(--accent-sage-soft);
+      color: var(--accent-sage);
+    }
+
+    .detail-item-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-top: 0.35rem;
+    }
+
+    /* ==========================================================================
+       7. MODALS: QR CODE SHARE & EDIT CARD / MEDICAL PROFILE
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 37, 35, 0.55);
+      backdrop-filter: blur(5px);
+      z-index: 250;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--card-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-xl);
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .modal-box.qr-box {
+      max-width: 390px;
+      text-align: center;
+    }
+
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.85rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-warm);
+    }
+
+    .qr-canvas-wrap {
+      background: #FFFFFF;
+      border: 2px solid var(--border-warm);
+      border-radius: 18px;
+      padding: 1.15rem;
+      display: inline-block;
+      margin: 0.5rem auto 1rem;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.8rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.28rem;
+      text-align: left;
+    }
+
+    .form-field label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-field input {
+      padding: 0.52rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.86rem;
+      font-family: inherit;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 1.4rem;
+      right: 1.4rem;
+      background: var(--text-primary);
+      color: #FFFDF9;
+      padding: 0.7rem 1.15rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-card);
+      z-index: 400;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: var(--transition-smooth);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Print Mode: Prints Both Front & Back of the Card Side-by-Side */
+    @media print {
+      .top-nav, .card-side-tabs, .drawer-toggle-bar, .modal-overlay {
+        display: none !important;
+      }
+      body {
+        background: #FFFFFF;
+        padding: 0;
+      }
+      .card-scene {
+        max-width: 100%;
+        perspective: none;
+      }
+      .card-flipper {
+        transform: none !important;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+      }
+      .card-face-front, .card-face-back {
+        position: relative !important;
+        transform: none !important;
+        box-shadow: none !important;
+        border: 1px solid #BBB !important;
+        break-inside: avoid;
+      }
+      .full-record-drawer {
+        display: block !important;
+        margin-top: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. TOP STICKY BAR: 7-LANGUAGE SWITCHER & TOOLS
+       ======================================================================== -->
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <nav class="lang-scroll" aria-label="Language Switcher">
+        <button class="lang-pill active" data-lang="zh-TW" onclick="setLanguage('zh-TW')">🇹🇼 繁體中文</button>
+        <button class="lang-pill" data-lang="en" onclick="setLanguage('en')">🇺🇸 English</button>
+        <button class="lang-pill" data-lang="ja" onclick="setLanguage('ja')">🇯🇵 日本語</button>
+        <button class="lang-pill" data-lang="ko" onclick="setLanguage('ko')">🇰🇷 한국어</button>
+        <button class="lang-pill" data-lang="vi" onclick="setLanguage('vi')">🇻🇳 Tiếng Việt</button>
+        <button class="lang-pill" data-lang="th" onclick="setLanguage('th')">🇹🇭 ภาษาไทย</button>
+        <button class="lang-pill" data-lang="ru" onclick="setLanguage('ru')">🇷🇺 Русский</button>
+      </nav>
+
+      <div class="top-tools">
+        <button id="btn-bilingual" class="tool-btn active-bilingual" onclick="toggleBilingual()">
+          <span>🌐</span>
+          <span id="ui-bilingual-label">雙語對照：開</span>
+        </button>
+        <button class="tool-btn" onclick="openEditModal()">
+          <span>✏️</span>
+          <span id="ui-edit-label">編輯名片資料</span>
+        </button>
+        <button class="tool-btn" onclick="window.print()">
+          <span>🖨️</span>
+          <span id="ui-print-label">列印雙面名片</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       2. MAIN STAGE: 3D FLIP DIGITAL BUSINESS CARD & ICE MEDICAL CARD
+       ======================================================================== -->
+  <main class="stage-wrapper">
+
+    <!-- Top Switcher Tabs (Front vs. Back) -->
+    <div class="card-side-tabs" role="tablist">
+      <button id="tab-front" class="side-tab-btn active-front" onclick="flipCard(false)">
+        <span>🪪</span>
+        <span id="ui-tab-front">正面：個人數位名片</span>
+      </button>
+      <button id="tab-back" class="side-tab-btn" onclick="flipCard(true)">
+        <span>🚨</span>
+        <span id="ui-tab-back">背面：隨身醫療急救卡 (ICE)</span>
+      </button>
+    </div>
+
+    <!-- 3D Flip Card Scene -->
+    <div class="card-scene" id="card-scene">
+      <div class="card-flipper">
+
+        <!-- ==================================================================
+             FRONT FACE: PERSONAL & PROFESSIONAL DIGITAL BUSINESS CARD
+             ================================================================== -->
+        <article class="card-face card-face-front" aria-label="Digital Business Card Front">
+          <div class="front-banner">
+            <span class="card-badge-chip" id="ui-front-badge">DIGITAL IDENTITY & HEALTH PASS</span>
+            <button class="flip-trigger-mini" onclick="flipCard(true)">
+              <span>🔄</span>
+              <span id="ui-flip-to-med">翻面：醫療急救卡</span>
+            </button>
+          </div>
+
+          <div class="front-body">
+            <!-- Avatar & Quick Share Buttons -->
+            <div class="avatar-row">
+              <div class="monogram-avatar" title="鄭亦焜 Yi-Kun Cheng">
+                <span class="monogram-hanzi">鄭</span>
+                <span class="monogram-en">YI-KUN</span>
+                <span class="status-dot" title="Verified Profile"></span>
+              </div>
+
+              <div class="quick-top-actions">
+                <button class="icon-pill-btn" onclick="openQRModal()">
+                  <span>📱</span>
+                  <span id="ui-btn-qr">名片 QR 碼</span>
+                </button>
+                <button class="icon-pill-btn" onclick="copyShareText()">
+                  <span>📋</span>
+                  <span id="ui-btn-copy">複製名片</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Name, Role & Bio -->
+            <div class="identity-block">
+              <h1 id="front-name">鄭亦焜 (Yi-Kun Cheng)</h1>
+              <div class="identity-role" id="front-role">軟體產品設計師 · Software Product Designer</div>
+              <p class="identity-tagline" id="front-bio">
+                專注於數位產品體驗與跨國無障礙設計。背面附有隨身多國語言醫療與過敏急救卡。
+              </p>
+            </div>
+
+            <!-- Biometric & Personal Quick Chips (DOB, Age, Height/Weight/BMI, Blood) -->
+            <div class="personal-chips-row" id="front-chips-row">
+              <!-- Populated dynamically -->
+            </div>
+
+            <!-- Interactive Contact Rows -->
+            <div class="contact-grid" id="front-contact-grid">
+              <!-- Populated dynamically -->
+            </div>
+
+            <!-- Primary Bottom Buttons: Save vCard & Flip to Emergency Side -->
+            <div class="front-cta-row">
+              <button class="btn-primary-earth" onclick="downloadVCard()">
+                <span>📥</span>
+                <span id="ui-btn-vcard">加入手機通訊錄 (.vcf)</span>
+              </button>
+              <button class="btn-emergency-flip" onclick="flipCard(true)">
+                <span>🏥</span>
+                <span id="ui-btn-view-ice">查看醫療急救背面</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================================================================
+             BACK FACE: EMERGENCY MEDICAL & ICE CARD (隨身醫療與急救背面)
+             ================================================================== -->
+        <article class="card-face card-face-back" aria-label="Emergency Medical Card Back">
+          <div class="back-header">
+            <div class="back-header-left">
+              <span style="font-size:1.35rem;">⚕️</span>
+              <div>
+                <h2 id="ui-back-title">隨身醫療急救卡 (EMERGENCY MEDICAL CARD)</h2>
+                <p id="ui-back-subtitle">請醫護人員優先查閱過敏史與目前用藥</p>
+              </div>
+            </div>
+            <button class="flip-trigger-mini" style="color:var(--text-primary);" onclick="flipCard(false)">
+              <span>↩</span>
+              <span id="ui-flip-to-front">返回正面名片</span>
+            </button>
+          </div>
+
+          <div class="back-body">
+            <!-- Patient Name & DOB on Back -->
+            <div class="med-patient-bar">
+              <div>
+                <div class="med-patient-name" id="back-name">鄭亦焜 (Yi-Kun Cheng)</div>
+                <div class="med-patient-sub" id="back-dob-sex">🎂 2003/12/16 (22歲) · 生理男 (Male)</div>
+              </div>
+              <span class="detail-badge" id="back-mri-badge">✅ MRI 安全 (純鈦植牙 #46)</span>
+            </div>
+
+            <!-- 4-Box Biometrics Strip: Height 171cm, Weight 55kg, BMI 18.8 / BSA 1.63, Blood O+ -->
+            <div class="biometric-strip" id="back-biometric-strip">
+              <!-- Populated dynamically -->
+            </div>
+
+            <!-- High-Alert Allergies Box -->
+            <div class="back-allergy-box">
+              <div class="back-box-title">
+                <span id="ui-back-allergy-title">⚠️ 嚴重藥物與食物過敏 (CRITICAL ALLERGIES)</span>
+                <span id="ui-back-allergy-hint">給藥前必看</span>
+              </div>
+              <div class="back-allergy-items" id="back-allergy-list">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Compact 4-Grid: Current Meds, Past Conditions, Surgery/Implants, Family/Code Status -->
+            <div class="back-summary-grid" id="back-summary-grid">
+              <!-- Populated dynamically -->
+            </div>
+
+            <!-- ICE Direct Call Bar -->
+            <div class="ice-call-bar">
+              <div class="ice-call-info">
+                <span style="color:var(--text-secondary); font-size:0.72rem; font-weight:600;" id="ui-ice-caption">
+                  緊急聯絡人 (In Case of Emergency - ICE)
+                </span>
+                <strong id="back-ice-name">鄭爸爸 / 鄭媽媽 (Parents)</strong>
+                <span id="back-ice-phone" style="color:var(--accent-terracotta-dark); font-weight:600;">+886-912-345-678</span>
+              </div>
+              <a id="back-ice-call-link" href="tel:+886912345678" class="ice-call-btn">
+                <span>📞</span>
+                <span id="ui-ice-call-btn">立即撥打</span>
+              </a>
+            </div>
+
+            <!-- Button to Expand Complete Medical Record Below -->
+            <button class="btn-primary-earth" style="width:100%;" onclick="toggleFullRecordDrawer(true)">
+              <span>📋</span>
+              <span id="ui-btn-open-full">展開下方完整病歷明細（疾病/家族/手術/用藥/檢驗）</span>
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         3. EXPANDABLE DRAWER FOR FULL DETAILED MEDICAL RECORD (完整病歷明細)
+         ====================================================================== -->
+    <div class="drawer-toggle-bar">
+      <button class="btn-Toggle-drawer" onclick="toggleFullRecordDrawer()">
+        <span id="ui-drawer-toggle-text">📂 點擊展開：完整隨身電子病歷（個人史、疾病史、家族史、手術史、用藥與檢驗）</span>
+        <span id="drawer-arrow">▼</span>
+      </button>
+    </div>
+
+    <section class="full-record-drawer" id="full-record-drawer" aria-label="Full Medical Record Details">
+      <div class="bento-grid" id="full-bento-grid">
+        <!-- Populated dynamically with all 7 clinical categories -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       4. QR CODE MODAL (OFFLINE SVG MATRIX GENERATOR FOR V-CARD / MEDICAL CARD)
+       ======================================================================== -->
+  <div class="modal-overlay" id="qr-modal" role="dialog" aria-modal="true">
+    <div class="modal-box qr-box">
+      <div class="modal-top">
+        <h3 style="font-size:1.05rem; font-weight:700;" id="ui-qr-modal-title">掃描或儲存電子名片</h3>
+        <button class="tool-btn" onclick="closeQRModal()">✕</button>
+      </div>
+      <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.5rem;" id="ui-qr-modal-desc">
+        鄭亦焜 (Yi-Kun Cheng) · 數位名片與緊急醫療摘要碼
+      </p>
+      <div class="qr-canvas-wrap" id="qr-svg-container">
+        <!-- Generated crisp SVG QR code badge -->
+      </div>
+      <div style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:1rem;">
+        🎂 2003/12/16 (22歲) · 171 cm / 55 kg · 🩸 <span id="qr-blood-text">O+</span>
+      </div>
+      <div style="display:flex; gap:0.5rem; justify-content:center;">
+        <button class="btn-primary-earth" style="width:100%;" onclick="downloadVCard()">
+          <span>📥</span>
+          <span>下載通訊錄 vCard (.vcf)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       5. EDIT PROFILE MODAL (LOCALSTORAGE PERSISTENCE)
+       ======================================================================== -->
+  <div class="modal-overlay" id="edit-modal" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-top">
+        <h3 style="font-size:1.08rem; font-weight:700;">編輯鄭亦焜的電子名片與急診聯絡資訊</h3>
+        <button class="tool-btn" onclick="closeEditModal()">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>姓名 (Name)</label>
+          <input type="text" id="edit-name" />
+        </div>
+        <div class="form-field">
+          <label>職稱 / 頭銜 (Title / Role)</label>
+          <input type="text" id="edit-role" />
+        </div>
+        <div class="form-field">
+          <label>出生日期 (DOB)</label>
+          <input type="text" id="edit-dob" />
+        </div>
+        <div class="form-field">
+          <label>身高 (cm) / 體重 (kg)</label>
+          <div style="display:flex; gap:0.4rem;">
+            <input type="number" id="edit-height" style="width:50%;" placeholder="171" />
+            <input type="number" id="edit-weight" style="width:50%;" placeholder="55" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label>血型 (Blood Type)</label>
+          <input type="text" id="edit-blood" />
+        </div>
+        <div class="form-field">
+          <label>個人行動電話 (Mobile Phone)</label>
+          <input type="text" id="edit-phone" />
+        </div>
+        <div class="form-field">
+          <label>電子信箱 (Email)</label>
+          <input type="email" id="edit-email" />
+        </div>
+        <div class="form-field">
+          <label>LINE ID / 社群或個人網站</label>
+          <input type="text" id="edit-social" />
+        </div>
+        <div class="form-field">
+          <label>所在地點 (Location)</label>
+          <input type="text" id="edit-location" />
+        </div>
+        <div class="form-field">
+          <label>緊急聯絡人與關係 (ICE Contact)</label>
+          <input type="text" id="edit-ice-name" />
+        </div>
+        <div class="form-field">
+          <label>緊急聯絡人電話 (ICE Phone)</label>
+          <input type="text" id="edit-ice-phone" />
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; flex-wrap:wrap;">
+        <button class="tool-btn" onclick="resetProfile()">還原預設值</button>
+        <button class="btn-primary-earth" onclick="saveProfile()">💾 儲存並更新名片</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">已更新電子名片</div>
+
+  <!-- ========================================================================
+       6. APPLICATION DATA & MULTI-LANGUAGE LOGIC
+       ======================================================================== -->
+  <script>
+    let currentLang = 'zh-TW';
+    let bilingualMode = true;
+    let isFlipped = false;
+    let isDrawerOpen = false;
+
+    const STORAGE_KEY = 'yikun_cheng_digital_med_card_v1';
+
+    // Default Profile for 鄭亦焜 (Yi-Kun Cheng), DOB: 2003/12/16, 171cm, 55kg
+    const defaultProfile = {
+      name: '鄭亦焜 (Yi-Kun Cheng)',
+      role: '軟體產品設計師 · Software Product Designer',
+      dob: '2003/12/16',
+      heightCm: '171',
+      weightKg: '55',
+      bloodType: 'O+ (Rh+)',
+      phone: '+886-988-168-203',
+      email: 'yikun.cheng@design.tw',
+      social: 'LINE: yikun_1216 | github.com/yikuncheng',
+      location: '新北市 / 臺北市, 台灣 (Taipei, Taiwan)',
+      iceName: '鄭爸爸 / 鄭媽媽 (Parents 父母)',
+      icePhone: '+886-912-345-678'
+    };
+
+    const localizedNames = {
+      'zh-TW': '鄭亦焜 (Yi-Kun Cheng)',
+      'en': 'Yi-Kun Cheng (鄭亦焜)',
+      'ja': '鄭 亦焜 (チェン・イークン / Yi-Kun Cheng)',
+      'ko': '정역혼 (Yi-Kun Cheng / 鄭亦焜)',
+      'vi': 'Trịnh Diệc Côn (Yi-Kun Cheng / 鄭亦焜)',
+      'th': 'เจิ้ง อี้คุน (Yi-Kun Cheng / 鄭亦焜)',
+      'ru': 'Чжэн Икунь (Yi-Kun Cheng / 鄭亦焜)'
+    };
+
+    const localizedRoles = {
+      'zh-TW': '軟體產品設計師 · Software Product Designer',
+      'en': 'Software Product Designer · UI/UX Engineer',
+      'ja': 'ソフトウェアプロダクトデザイナー · UI/UX設計',
+      'ko': '소프트웨어 프로덕트 디자이너 · UI/UX 엔지니어',
+      'vi': 'Nhà thiết kế sản phẩm phần mềm · Kỹ sư UI/UX',
+      'th': 'นักออกแบบผลิตภัณฑ์ซอฟต์แวร์ · วิศวกร UI/UX',
+      'ru': 'Дизайнер программных продуктов · Инженер UI/UX'
+    };
+
+    const localizedBios = {
+      'zh-TW': '專注於數位產品體驗與跨國無障礙設計。點擊右上角或下方按鈕可翻轉至「隨身醫療急救卡 (ICE)」。',
+      'en': 'Focused on digital product design & cross-border accessibility. Flip this card for my 7-language Emergency Medical & Allergy Summary.',
+      'ja': 'デジタルプロダクト設計と多言語アクセシビリティを専門としています。裏面は救急医療・アレルギーカード（ICE）です。',
+      'ko': '디지털 프로덕트 디자인을 전문으로 합니다. 카드를 뒤집으면 응급 의료 및 알레르기 요약 카드(ICE)를 확인할 수 있습니다.',
+      'vi': 'Chuyên về thiết kế sản phẩm số. Lật mặt sau để xem Thẻ Y tế Cấp cứu & Dị ứng thuốc (ICE) đa ngôn ngữ.',
+      'th': 'เชี่ยวชาญด้านการออกแบบผลิตภัณฑ์ดิจิทัล พลิกด้านหลังเพื่อดูบัตรข้อมูลการแพทย์ฉุกเฉินและการแพ้ยา (ICE)',
+      'ru': 'Специалист по дизайну цифровых продуктов. На обороте — экстренная медицинская карта и аллергоанамнез (ICE).'
+    };
+
+    const uiText = {
+      'zh-TW': {
+        bilingualOn: '雙語對照：開',
+        bilingualOff: '雙語對照：關',
+        editBtn: '編輯名片資料',
+        printBtn: '列印雙面名片',
+        tabFront: '正面：個人數位名片',
+        tabBack: '背面：隨身醫療急救卡 (ICE)',
+        flipToMed: '翻面：醫療急救卡',
+        flipToFront: '返回正面名片',
+        btnQr: '名片 QR 碼',
+        btnCopy: '複製名片',
+        btnVcard: '加入手機通訊錄 (.vcf)',
+        btnViewIce: '翻轉至醫療急救背面',
+        backTitle: '隨身醫療急救卡 (EMERGENCY MEDICAL CARD)',
+        backSubtitle: '請醫護人員優先查閱過敏史、體重劑量基準與目前用藥',
+        allergyTitle: '⚠️ 嚴重藥物與食物過敏 (CRITICAL ALLERGIES)',
+        allergyHint: '給藥前必看',
+        iceCaption: '緊急聯絡人 (In Case of Emergency - ICE)',
+        iceCallBtn: '立即撥打',
+        btnOpenFull: '展開下方完整病歷明細（疾病/家族/手術/用藥/檢驗）',
+        drawerToggleOpen: '📂 點擊收合：完整隨身電子病歷明細',
+        drawerToggleClosed: '📂 點擊展開：完整隨身電子病歷（個人史、疾病史、家族史、手術史、用藥與檢驗）',
+        labels: {
+          dobAge: '生日 2003/12/16 (22歲)',
+          height: '身高 Height',
+          weight: '體重 Weight',
+          bmiBsa: 'BMI / 體表面積',
+          blood: '血型 Blood',
+          phone: '行動電話 Mobile',
+          email: '電子信箱 Email',
+          social: 'LINE / 社群與作品集',
+          location: '所在地點 Location',
+          callAction: '撥號 ↗',
+          mailAction: '寄信 ↗',
+          copyAction: '複製 ↗'
+        }
+      },
+      'en': {
+        bilingualOn: 'Bilingual (zh-TW): ON',
+        bilingualOff: 'Bilingual: OFF',
+        editBtn: 'Edit Card',
+        printBtn: 'Print Dual-Sided Card',
+        tabFront: 'Front: Digital Business Card',
+        tabBack: 'Back: Emergency Medical Card (ICE)',
+        flipToMed: 'Flip: Medical ICE',
+        flipToFront: 'Back to Front',
+        btnQr: 'QR Code',
+        btnCopy: 'Copy Info',
+        btnVcard: 'Save Contact (.vcf)',
+        btnViewIce: 'Flip to Medical ICE Card',
+        backTitle: 'EMERGENCY MEDICAL & ICE CARD',
+        backSubtitle: 'Attending Staff: Please verify allergies, weight/BSA & active meds first',
+        allergyTitle: '⚠️ CRITICAL ALLERGIES & ADR',
+        allergyHint: 'Verify Before Dosing',
+        iceCaption: 'In Case of Emergency (ICE Contact)',
+        iceCallBtn: 'Call Now',
+        btnOpenFull: 'Expand Full Medical History Below (PMH, Surgery, Family, Labs)',
+        drawerToggleOpen: '📂 Hide Complete Medical Record Details',
+        drawerToggleClosed: '📂 Expand Complete Medical Record (Personal, PMH, Family, Surgery, Meds & Labs)',
+        labels: {
+          dobAge: 'DOB 2003-12-16 (Age 22)',
+          height: 'Height',
+          weight: 'Weight',
+          bmiBsa: 'BMI / BSA',
+          blood: 'Blood Group',
+          phone: 'Mobile Phone',
+          email: 'Email Address',
+          social: 'LINE / Portfolio',
+          location: 'Location',
+          callAction: 'Call ↗',
+          mailAction: 'Email ↗',
+          copyAction: 'Copy ↗'
+        }
+      },
+      'ja': {
+        bilingualOn: '二言語併記：ON',
+        bilingualOff: '二言語併記：OFF',
+        editBtn: '名刺データを編集',
+        printBtn: '両面カード印刷',
+        tabFront: '表面：デジタル名刺',
+        tabBack: '裏面：救急医療カード (ICE)',
+        flipToMed: '裏面：救急医療カード',
+        flipToFront: '表面へ戻る',
+        btnQr: 'QRコード',
+        btnCopy: '情報をコピー',
+        btnVcard: '連絡先に追加 (.vcf)',
+        btnViewIce: '救急医療カード（裏面）を見る',
+        backTitle: '携帯型・救急医療カード (EMERGENCY MEDICAL CARD)',
+        backSubtitle: '医療従事者の方へ：投薬前にアレルギー歴と常用薬をご確認ください',
+        allergyTitle: '⚠️ 薬物・食物アレルギー歴 (ALLERGIES)',
+        allergyHint: '投薬前必読',
+        iceCaption: '緊急連絡先 (In Case of Emergency - ICE)',
+        iceCallBtn: '発信する',
+        btnOpenFull: '詳細な電子カルテ（既往歴・手術歴・家族歴・検査値）を展開',
+        drawerToggleOpen: '📂 詳細な電子カルテを閉じる',
+        drawerToggleClosed: '📂 詳細な電子カルテを展開（生活歴・既往歴・家族歴・手術歴・常用薬）',
+        labels: {
+          dobAge: '2003年12月16日生 (22歳)',
+          height: '身長 Height',
+          weight: '体重 Weight',
+          bmiBsa: 'BMI / 体表面積',
+          blood: '血液型 Blood',
+          phone: '携帯電話番号',
+          email: 'メールアドレス',
+          social: 'LINE / ポートフォリオ',
+          location: '所在地',
+          callAction: '発信 ↗',
+          mailAction: 'メール ↗',
+          copyAction: 'コピー ↗'
+        }
+      },
+      'ko': {
+        bilingualOn: '이중 언어 표시: 켜짐',
+        bilingualOff: '이중 언어 표시: 꺼짐',
+        editBtn: '명함 정보 수정',
+        printBtn: '양면 명함 인쇄',
+        tabFront: '앞면: 디지털 명함',
+        tabBack: '뒷면: 응급 의료 카드 (ICE)',
+        flipToMed: '뒷면: 응급 의료 카드',
+        flipToFront: '앞면으로 돌아가기',
+        btnQr: 'QR 코드',
+        btnCopy: '정보 복사',
+        btnVcard: '연락처 저장 (.vcf)',
+        btnViewIce: '응급 의료 카드(뒷면) 보기',
+        backTitle: '휴대용 응급 의료 카드 (EMERGENCY MEDICAL CARD)',
+        backSubtitle: '의료진 안내: 투약 전 약물 알레르기와 복용 중인 약물을 먼저 확인해 주십시오',
+        allergyTitle: '⚠️ 중증 약물 및 음식 알레르기 (ALLERGIES)',
+        allergyHint: '처방 전 필수 확인',
+        iceCaption: '비상 연락처 (In Case of Emergency - ICE)',
+        iceCallBtn: '전화 걸기',
+        btnOpenFull: '아래 전체 의무기록 상세 보기 (과거병력/가족력/수술력/복용약)',
+        drawerToggleOpen: '📂 전체 의무기록 상세 닫기',
+        drawerToggleClosed: '📂 전체 의무기록 상세 펼치기 (개인력, 병력, 가족력, 수술력, 복용약)',
+        labels: {
+          dobAge: '2003-12-16생 (만 22세)',
+          height: '신장 Height',
+          weight: '체중 Weight',
+          bmiBsa: 'BMI / 체표면적',
+          blood: '혈액형 Blood',
+          phone: '휴대전화',
+          email: '이메일',
+          social: 'LINE / 포트폴리오',
+          location: '거주지',
+          callAction: '통화 ↗',
+          mailAction: '메일 ↗',
+          copyAction: '복사 ↗'
+        }
+      },
+      'vi': {
+        bilingualOn: 'Song ngữ: BẬT',
+        bilingualOff: 'Song ngữ: TẮT',
+        editBtn: 'Sửa danh thiếp',
+        printBtn: 'In danh thiếp 2 mặt',
+        tabFront: 'Mặt trước: Danh thiếp số',
+        tabBack: 'Mặt sau: Thẻ Y tế Cấp cứu (ICE)',
+        flipToMed: 'Lật: Thẻ Y tế',
+        flipToFront: 'Về mặt trước',
+        btnQr: 'Mã QR',
+        btnCopy: 'Sao chép',
+        btnVcard: 'Lưu danh bạ (.vcf)',
+        btnViewIce: 'Lật sang Thẻ Y tế Cấp cứu',
+        backTitle: 'THẺ Y TẾ CẤP CỨU CÁ NHÂN (ICE MEDICAL CARD)',
+        backSubtitle: 'Nhân viên y tế: Vui lòng kiểm tra kỹ dị ứng thuốc và thuốc đang dùng',
+        allergyTitle: '⚠️ TIỀN SỬ DỊ ỨNG THUỐC & THỨC ĂN',
+        allergyHint: 'Kiểm tra trước khi cấp thuốc',
+        iceCaption: 'Liên hệ khẩn cấp (ICE Contact)',
+        iceCallBtn: 'Gọi ngay',
+        btnOpenFull: 'Mở rộng toàn bộ Hồ sơ Bệnh án bên dưới',
+        drawerToggleOpen: '📂 Thu gọn Hồ sơ Bệnh án chi tiết',
+        drawerToggleClosed: '📂 Mở rộng Hồ sơ Bệnh án chi tiết (Bệnh sử, Gia đình, Phẫu thuật, Thuốc)',
+        labels: {
+          dobAge: 'Sinh: 16/12/2003 (22 tuổi)',
+          height: 'Chiều cao',
+          weight: 'Cân nặng',
+          bmiBsa: 'BMI / BSA',
+          blood: 'Nhóm máu',
+          phone: 'Điện thoại',
+          email: 'Email',
+          social: 'LINE / Liên kết',
+          location: 'Địa chỉ',
+          callAction: 'Gọi ↗',
+          mailAction: 'Gửi thư ↗',
+          copyAction: 'Chép ↗'
+        }
+      },
+      'th': {
+        bilingualOn: 'สองภาษา: เปิด',
+        bilingualOff: 'สองภาษา: ปิด',
+        editBtn: 'แก้ไขนามบัตร',
+        printBtn: 'พิมพ์นามบัตร 2 ด้าน',
+        tabFront: 'ด้านหน้า: นามบัตรดิจิทัล',
+        tabBack: 'ด้านหลัง: บัตรการแพทย์ฉุกเฉิน (ICE)',
+        flipToMed: 'พลิก: บัตรการแพทย์',
+        flipToFront: 'กลับด้านหน้า',
+        btnQr: 'คิวอาร์โค้ด',
+        btnCopy: 'คัดลอก',
+        btnVcard: 'บันทึกผู้ติดต่อ (.vcf)',
+        btnViewIce: 'พลิกดูบัตรการแพทย์ฉุกเฉิน',
+        backTitle: 'บัตรข้อมูลการแพทย์ฉุกเฉิน (EMERGENCY MEDICAL CARD)',
+        backSubtitle: 'สำหรับบุคลากรทางการแพทย์: โปรดตรวจสอบประวัติแพ้ยาและยาที่ใช้ก่อนให้การรักษา',
+        allergyTitle: '⚠️ ประวัติการแพ้ยาและอาหารที่รุนแรง (ALLERGIES)',
+        allergyHint: 'ตรวจสอบก่อนให้ยา',
+        iceCaption: 'ผู้ติดต่อฉุกเฉิน (In Case of Emergency - ICE)',
+        iceCallBtn: 'โทรออก',
+        btnOpenFull: 'ดูรายละเอียดเวชระเบียนทั้งหมดด้านล่าง',
+        drawerToggleOpen: '📂 ซ่อนรายละเอียดเวชระเบียน',
+        drawerToggleClosed: '📂 แสดงรายละเอียดเวชระเบียนทั้งหมด (ประวัติส่วนตัว โรคประจำตัว ผ่าตัด ยา)',
+        labels: {
+          dobAge: 'เกิด 16/12/2003 (อายุ 22 ปี)',
+          height: 'ส่วนสูง',
+          weight: 'น้ำหนัก',
+          bmiBsa: 'BMI / พื้นที่ผิวกาย',
+          blood: 'หมู่เลือด',
+          phone: 'เบอร์โทรศัพท์',
+          email: 'อีเมล',
+          social: 'LINE / พอร์ตโฟลิโอ',
+          location: 'ที่อยู่',
+          callAction: 'โทร ↗',
+          mailAction: 'อีเมล ↗',
+          copyAction: 'คัดลอก ↗'
+        }
+      },
+      'ru': {
+        bilingualOn: 'Двуязычный: ВКЛ',
+        bilingualOff: 'Двуязычный: ВЫКЛ',
+        editBtn: 'Изменить визитку',
+        printBtn: 'Печать визитки',
+        tabFront: 'Лицевая: Цифровая визитка',
+        tabBack: 'Оборот: Экстренная медкарта (ICE)',
+        flipToMed: 'Оборот: Медкарта',
+        flipToFront: 'На лицевую',
+        btnQr: 'QR-код',
+        btnCopy: 'Копировать',
+        btnVcard: 'Сохранить контакт (.vcf)',
+        btnViewIce: 'Открыть экстренную медкарту',
+        backTitle: 'ЭКСТРЕННАЯ МЕДИЦИНСКАЯ КАРТА (ICE CARD)',
+        backSubtitle: 'Вниманию врачей: проверьте аллергии и принимаемые препараты перед лечением',
+        allergyTitle: '⚠️ ТЯЖЕЛЫЕ АЛЛЕРГИИ И НЕПЕРЕНОСИМОСТЬ ЛЕКАРСТВ',
+        allergyHint: 'Проверить перед введением',
+        iceCaption: 'Экстренный контакт (ICE Contact)',
+        iceCallBtn: 'Позвонить',
+        btnOpenFull: 'Развернуть полную медицинскую карту ниже',
+        drawerToggleOpen: '📂 Свернуть полную медицинскую карту',
+        drawerToggleClosed: '📂 Развернуть полную медкарту (анамнез жизни, болезни, операции, препараты)',
+        labels: {
+          dobAge: 'Д.Р. 16.12.2003 (22 года)',
+          height: 'Рост',
+          weight: 'Вес',
+          bmiBsa: 'ИМТ / ППТ',
+          blood: 'Группа крови',
+          phone: 'Телефон',
+          email: 'Эл. почта',
+          social: 'LINE / Портфолио',
+          location: 'Локация',
+          callAction: 'Вызов ↗',
+          mailAction: 'Письмо ↗',
+          copyAction: 'Копия ↗'
+        }
+      }
+    };
+
+    // Condensed Medical Card Back Highlights (7 Languages)
+    const cardBackHighlights = {
+      allergies: [
+        {
+          'zh-TW': '🔴 盤尼西林類 (Penicillin / Amoxicillin)：嚴重蕁麻疹、眼唇血管性水腫、呼吸急促',
+          'en': '🔴 Penicillin / Amoxicillin: Severe urticaria, angioedema & dyspnea',
+          'ja': '🔴 ペニシリン系抗菌薬 (Penicillin)：重度蕁麻疹・血管性浮腫・呼吸苦',
+          'ko': '🔴 페니실린계 항생제 (Penicillin): 중증 두드러기, 혈관부종 및 호흡곤란',
+          'vi': '🔴 Kháng sinh Penicillin / Amoxicillin: Mề đay nặng, phù mạch, khó thở',
+          'th': '🔴 ยาปฏิชีวนะกลุ่มเพนิซิลลิน (Penicillin): ผื่นลมพิษรุนแรง ปากบวม หายใจลำบาก',
+          'ru': '🔴 Пенициллины (Амоксициллин): тяжелая крапивница, отек Квинке, одышка'
+        },
+        {
+          'zh-TW': '🔴 非類固醇止痛藥 (NSAIDs: Ibuprofen / Ketorolac)：眼眶腫脹與誘發氣喘（止痛退燒請改用 Acetaminophen 普拿疼）',
+          'en': '🔴 NSAIDs (Ibuprofen/Ketorolac): Periorbital edema & bronchospasm (Use Acetaminophen safely)',
+          'ja': '🔴 NSAIDs（ロキソプロフェン・イブプロフェン等）：眼周囲浮腫・喘息誘発（※アセトアミノフェンは安全）',
+          'ko': '🔴 소염진통제 (NSAIDs: 이부프로펜 등): 눈 주위 부종 및 천식 유발 (아세트아미노펜/타이레놀 안전)',
+          'vi': '🔴 Thuốc kháng viêm NSAIDs (Ibuprofen): Sưng mắt & co thắt phế quản (Dùng Paracetamol an toàn)',
+          'th': '🔴 ยาแก้ปวดกลุ่ม NSAIDs (Ibuprofen): ตาบวมและหลอดลมตีบ (ใช้พาราเซตามอลแทนได้อย่างปลอดภัย)',
+          'ru': '🔴 НПВП (Ибупрофен, Кеторолак): отек век и бронхоспазм (безопасен Парацетамол)'
+        },
+        {
+          'zh-TW': '🟠 含碘 CT 顯影劑與甲殼類海鮮：曾起紅疹搔癢（若需顯影劑建議預先給抗組織胺 + 類固醇）',
+          'en': '🟠 Iodinated CT Contrast & Shellfish: Pruritic rash (Pre-medicate before contrast CT)',
+          'ja': '🟠 ヨード造影剤・甲殻類：発疹・掻痒感（造影CT時は前投薬を推奨）',
+          'ko': '🟠 요오드 조영제 및 갑각류: 발진 및 가려움 (조영CT 시 전처치 권장)',
+          'vi': '🟠 Thuốc cản quang I-ốt & Hải sản có vỏ: Phát ban ngứa (Cần tiêm dự phòng trước chụp CT)',
+          'th': '🟠 สารทึบรังสีไอโอดีนและอาหารทะเลเปลือกแข็ง: ผื่นคัน (ควรให้ยาป้องกันก่อนฉีดสี CT)',
+          'ru': '🟠 Йодсодержащий контраст и ракообразные: зудящая сыпь (премедикация перед КТ)'
+        }
+      ],
+      summaryBoxes: [
+        {
+          title: {
+            'zh-TW': '💊 目前規律與隨身用藥',
+            'en': '💊 Active Medications',
+            'ja': '💊 現在の常用薬・携帯薬',
+            'ko': '💊 현재 복용 및 휴대 약물',
+            'vi': '💊 Thuốc đang sử dụng',
+            'th': '💊 ยาที่ใช้ประจำและพกติดตัว',
+            'ru': '💊 Принимаемые препараты'
+          },
+          body: {
+            'zh-TW': '• Telmisartan 40mg QD (降壓)\n• Rosuvastatin 5mg QD (降脂)\n• Symbicort 吸入劑 PRN (氣喘備用)',
+            'en': '• Telmisartan 40mg PO QD\n• Rosuvastatin 5mg PO QD\n• Symbicort Inhaler PRN',
+            'ja': '• テルミサルタン 40mg 1日1回\n• ロスバスタチン 5mg 1日1回\n• シムビコート吸入剤（発作時頓用）',
+            'ko': '• 텔미사르탄 40mg 1일 1회\n• 로수바스타틴 5mg 1일 1회\n• 심비코트 흡입기 (필요시 PRN)',
+            'vi': '• Telmisartan 40mg (1 viên sáng)\n• Rosuvastatin 5mg (tối)\n• Ống hít Symbicort (khi cần)',
+            'th': '• Telmisartan 40mg วันละครั้ง\n• Rosuvastatin 5mg วันละครั้ง\n• ยาพ่น Symbicort (เมื่อมีอาการ)',
+            'ru': '• Телмисартан 40 мг 1 р/д\n• Розувастатин 5 мг 1 р/д\n• Симбикорт ингалятор (PRN)'
+          }
+        },
+        {
+          title: {
+            'zh-TW': '🩺 過去疾病史與慢性病',
+            'en': '🩺 Past Medical History',
+            'ja': '🩺 既往歴・基礎疾患',
+            'ko': '🩺 과거 병력 및 기저질환',
+            'vi': '🩺 Tiền sử bệnh lý',
+            'th': '🩺 โรคประจำตัวและประวัติป่วย',
+            'ru': '🩺 Хронические заболевания'
+          },
+          body: {
+            'zh-TW': '• 原發性高血壓（控制良好 120/76）\n• 輕度間歇性氣喘（無插管史）\n• 胃食道逆流（幽門桿菌已根除）',
+            'en': '• Essential HTN (Controlled 120/76)\n• Mild intermittent asthma\n• GERD (H. pylori eradicated)',
+            'ja': '• 本態性高血圧（120/76で安定）\n• 軽症間欠型喘息（挿管歴なし）\n• 胃食道逆流症（ピロリ除菌済）',
+            'ko': '• 본태성 고혈압 (120/76 조절 양호)\n• 경증 간헐성 천식 (삽관 이력 없음)\n• 위식도역류질환 (제균 완료)',
+            'vi': '• Tăng huyết áp (Ổn định 120/76)\n• Hen phế quản nhẹ\n• Trào ngược dạ dày (Đã diệt H. pylori)',
+            'th': '• ความดันโลหิตสูง (คุมได้ดี 120/76)\n• โรคหืดระดับน้อย\n• กรดไหลย้อน (กำจัดเชื้อ H. pylori แล้ว)',
+            'ru': '• Гипертензия (АД 120/76)\n• Легкая бронхиальная астма\n• ГЭРБ (эрадикация H. pylori)'
+          }
+        },
+        {
+          title: {
+            'zh-TW': '✂️ 手術史與體內植入物',
+            'en': '✂️ Surgeries & Implants',
+            'ja': '✂️ 手術歴・体内インプラント',
+            'ko': '✂️ 수술력 및 체내 보형물',
+            'vi': '✂️ Phẫu thuật & Cấy ghép',
+            'th': '✂️ ประวัติผ่าตัดและวัสดุฝังใน',
+            'ru': '✂️ Операции и имплантаты'
+          },
+          body: {
+            'zh-TW': '• 2019 腹腔鏡闌尾切除（無麻醉異常）\n• 2022 右下 #46 純鈦植牙（可安全做 1.5T/3.0T MRI）',
+            'en': '• 2019 Laparoscopic Appendectomy\n• 2022 Pure Titanium Dental Implant #46 (MRI Safe)',
+            'ja': '• 2019 腹腔鏡下虫垂切除（麻酔問題なし）\n• 2022 右下#46 純チタン歯科インプラント（MRI対応）',
+            'ko': '• 2019 복강경 충수절제술 (마취 이상 없음)\n• 2022 우측 하악 #46 순수 티타늄 임플란트 (MRI 안전)',
+            'vi': '• 2019 Cắt ruột thừa nội soi\n• 2022 Implant nha khoa Titanium #46 (Chụp MRI an toàn)',
+            'th': '• 2019 ผ่าตัดไส้ติ่งผ่านกล้อง\n• 2022 รากฟันเทียมไทเทเนียมซี่ #46 (เข้า MRI ได้ปลอดภัย)',
+            'ru': '• 2019 Лапароскопическая аппендэктомия\n• 2022 Титановый зубной имплантат #46 (МРТ безопасно)'
+          }
+        },
+        {
+          title: {
+            'zh-TW': '🧬 家族史與急救破傷風紀錄',
+            'en': '🧬 Family History & Tetanus',
+            'ja': '🧬 家族歴・破傷風ワクチン',
+            'ko': '🧬 가족력 및 파상풍 접종',
+            'vi': '🧬 Gia đình & Vắc-xin Uốn ván',
+            'th': '🧬 ประวัติครอบครัวและวัคซีน',
+            'ru': '🧬 Семейный анамнез и прививки'
+          },
+          body: {
+            'zh-TW': '• 父：高血壓｜母：輕度高血脂\n• 破傷風 Tdap：2024/03 接種 (效期至2034)\n• 急救意願：Full Code 完整急救',
+            'en': '• Father: HTN | Mother: Mild Dyslipidemia\n• Tdap Booster: Mar 2024 (Active)\n• Code Status: Full Code',
+            'ja': '• 父：高血圧｜母：軽度脂質異常症\n• 破傷風(Tdap)：2024年3月接種済\n• 蘇生希望：フルコード (Full Code)',
+            'ko': '• 부: 고혈압 | 모: 경미한 고지혈증\n• 파상풍(Tdap): 2024.03 접종 완료\n• 연명의료: Full Code (모든 처치 희망)',
+            'vi': '• Cha: Tăng HA | Mẹ: Mỡ máu nhẹ\n• Uốn ván (Tdap): Tiêm 03/2024\n• Hồi sức: Full Code toàn diện',
+            'th': '• บิดา: ความดันสูง | มารดา: ไขมันสูงเล็กน้อย\n• วัคซีนบาดทะยัก Tdap: มี.ค. 2024\n• การกู้ชีพ: Full Code เต็มรูปแบบ',
+            'ru': '• Отец: гипертензия | Мать: дислипидемия\n• Прививка АДС-М (Tdap): март 2024\n• Реанимация: Full Code'
+          }
+        }
+      ]
+    };
+
+    // Full Detailed Medical Record Categories for the Expandable Drawer
+    const detailedDrawerSections = [
+      {
+        icon: '🏃',
+        title: {
+          'zh-TW': '個人史與生活習慣 (Personal & Social History)',
+          'en': 'Personal, Social & Travel History',
+          'ja': '生活歴・社会歴・渡航歴',
+          'ko': '개인 사회력 및 생활 습관',
+          'vi': 'Tiền sử cá nhân & Lối sống',
+          'th': 'ประวัติส่วนตัวและพฤติกรรมสุขภาพ',
+          'ru': 'Социальный анамнез и образ жизни'
+        },
+        items: [
+          {
+            top: { 'zh-TW': '菸酒習慣與環境暴露', 'en': 'Smoking, Alcohol & Occupation', 'ja': '喫煙・飲酒・職業', 'ko': '흡연·음주·직업', 'vi': 'Thuốc lá, Rượu bia & Nghề nghiệp', 'th': 'การสูบบุหรี่ ดื่มสุรา และอาชีพ', 'ru': 'Курение, алкоголь и профессия' },
+            badge: 'Never Smoker',
+            desc: {
+              'zh-TW': '從不吸菸（亦無電子煙）；偶爾社交小酌（每月 1-2 次）；軟體產品設計師（室內辦公無化學粉塵暴露）。配戴軟式日拋隱形眼鏡（昏迷急救時請取下）。',
+              'en': 'Never smoker (no vaping); occasional social wine (1-2x/month); Software Product Designer. Wears soft daily contact lenses (remove if unconscious).',
+              'ja': '非喫煙者（電子タバコなし）・機会飲酒のみ。ITデザイナー。ソフトコンタクトレンズ装用（意識不明時は外してください）。',
+              'ko': '비흡연자(전자담배 미사용), 월 1~2회 사교적 음주. 소프트웨어 디자이너. 소프트 콘택트렌즈 착용(의식불명 시 제거 요망).',
+              'vi': 'Không hút thuốc; uống xã giao 1-2 lần/tháng. Đeo kính áp tròng mềm (vui lòng tháo nếu bất tỉnh).',
+              'th': 'ไม่สูบบุหรี่ ดื่มเพื่อเข้าสังคมเดือนละ 1-2 ครั้ง ใส่คอนแทคเลนส์ชนิดนิ่ม (โปรดถอดออกหากหมดสติ)',
+              'ru': 'Не курит; алкоголь редко социально. Носит мягкие контактные линзы (снять при потере сознания).'
+            }
+          },
+          {
+            top: { 'zh-TW': '體能狀態與近期旅遊史', 'en': 'Functional Capacity & Travel', 'ja': '身体機能・渡航歴', 'ko': '신체 기능 및 해외 여행력', 'vi': 'Thể lực & Lịch sử du lịch', 'th': 'สมรรถภาพร่างกายและการเดินทาง', 'ru': 'Физическая активность и поездки' },
+            badge: '> 7 METs',
+            desc: {
+              'zh-TW': '每週慢跑與重訓 3 次，可輕鬆爬 4 層樓不喘（> 7 METs）。過去半年曾造訪日本東京與泰國曼谷，無瘧疾疫區暴露史。',
+              'en': 'Jogging & weight training 3x/week (> 7 METs). Visited Tokyo & Bangkok in past 6 months; no malaria exposure.',
+              'ja': '週3回ランニングと筋トレ（階段4階まで息切れなし > 7 METs）。過去半年内に東京・バンコク渡航。',
+              'ko': '주 3회 조깅 및 근력운동 (> 7 METs). 최근 6개월 내 도쿄 및 방콕 방문, 말라리아 위험지역 방문 없음.',
+              'vi': 'Chạy bộ & tập tạ 3 lần/tuần (> 7 METs). Đã đi Tokyo & Bangkok trong 6 tháng qua.',
+              'th': 'วิ่งและเวทเทรนนิ่งสัปดาห์ละ 3 ครั้ง (> 7 METs) เดินทางไปโตเกียวและกรุงเทพฯ ในรอบ 6 เดือน',
+              'ru': 'Бег и силовые тренировки 3 раза в неделю (> 7 METs). Посещал Токио и Бангкок.'
+            }
+          }
+        ]
+      },
+      {
+        icon: '📊',
+        title: {
+          'zh-TW': '平時生命徵象與近期抽血基準值 (Baseline Vitals & Labs)',
+          'en': 'Baseline Vitals & Recent Lab Summary',
+          'ja': '平常時バイタルサイン・直近検査基準値',
+          'ko': '평소 활력징후 및 최근 혈액검사 기준치',
+          'vi': 'Dấu hiệu sinh tồn nền & Xét nghiệm',
+          'th': 'สัญญาณชีพพื้นฐานและผลตรวจเลือดล่าสุด',
+          'ru': 'Базовые показатели и лабораторные анализы'
+        },
+        items: [
+          {
+            top: { 'zh-TW': '平時血壓 / 心率 / 血氧 / 心電圖', 'en': 'Baseline BP / HR / SpO2 / ECG', 'ja': '平常時血圧・脈拍・SpO2・心電図', 'ko': '평소 혈압 / 심박수 / 산소포화도 / 심전도', 'vi': 'Huyết áp / Nhịp tim / SpO2 / ECG nền', 'th': 'ความดัน / ชีพจร / ออกซิเจน / คลื่นหัวใจ', 'ru': 'Базовое АД / ЧСС / SpO2 / ЭКГ' },
+            badge: '120/76 mmHg',
+            desc: {
+              'zh-TW': '平時晨間血壓 120/76 mmHg｜安靜心率 64 bpm｜室溫血氧 SpO2 99%｜基準心電圖：正常竇性心律 (Normal Sinus Rhythm, QTc 410ms)。',
+              'en': 'Resting BP 120/76 mmHg | HR 64 bpm | SpO2 99% (Room Air) | Baseline ECG: Normal Sinus Rhythm, no BBB, QTc 410ms.',
+              'ja': '安静時血圧 120/76 mmHg｜心拍数 64 bpm｜SpO2 99%｜基準心電図：正常洞調律 (NSR, QTc 410ms)。',
+              'ko': '평소 혈압 120/76 mmHg | 안정시 심박수 64 bpm | SpO2 99% | 기본 심전도: 정상 동리듬 (NSR).',
+              'vi': 'Huyết áp nghỉ 120/76 mmHg | Nhịp tim 64 bpm | SpO2 99% | Điện tâm đồ nền: Nhịp xoang bình thường.',
+              'th': 'ความดันขณะพัก 120/76 mmHg | ชีพจร 64 bpm | SpO2 99% | คลื่นหัวใจพื้นฐาน: จังหวะไซนัสปกติ',
+              'ru': 'АД в покое 120/76 мм рт. ст. | ЧСС 64 уд/мин | SpO2 99% | ЭКГ: нормальный синусовый ритм.'
+            }
+          },
+          {
+            top: { 'zh-TW': '近期血液生化與抗體檢驗 (2026-09)', 'en': 'Recent Blood Chemistry & Antibodies', 'ja': '直近の血液生化学・抗体検査 (2026-09)', 'ko': '최근 혈액 생화학 및 항체 검사 (2026-09)', 'vi': 'Xét nghiệm sinh hóa máu & Kháng thể', 'th': 'ผลตรวจเคมีในเลือดและภูมิคุ้มกัน (2026-09)', 'ru': 'Биохимия крови и антитела (09.2026)' },
+            badge: 'eGFR 98',
+            desc: {
+              'zh-TW': '空腹血糖 92 mg/dL (HbA1c 5.4%)｜腎功能 Cr 0.88 mg/dL (eGFR 98)｜肝功能 ALT 21 U/L｜低密度膽固醇 LDL 86 mg/dL｜B肝表面抗體 HBsAb 陽性 (+)。',
+              'en': 'Fasting Glucose 92 mg/dL (HbA1c 5.4%) | Cr 0.88 mg/dL (eGFR 98) | ALT 21 U/L | LDL-C 86 mg/dL | Hep B immune (HBsAb Positive +).',
+              'ja': '空腹時血糖 92 (HbA1c 5.4%)｜Cr 0.88 (eGFR 98)｜ALT 21｜LDL-C 86 mg/dL｜B型肝炎 HBs抗体陽性 (+)。',
+              'ko': '공복혈당 92 (HbA1c 5.4%) | Cr 0.88 (eGFR 98) | ALT 21 | LDL 86 | B형간염 표면항체 HBsAb 양성(+).',
+              'vi': 'Đường huyết 92 (HbA1c 5.4%) | Cr 0.88 (eGFR 98) | ALT 21 | LDL-C 86 | Kháng thể Viêm gan B HBsAb Dương tính (+).',
+              'th': 'น้ำตาลกลูโคส 92 (HbA1c 5.4%) | Cr 0.88 (eGFR 98) | ALT 21 | LDL 86 | มีภูมิคุ้มกันไวรัสตับอักเสบบี (HBsAb +)',
+              'ru': 'Глюкоза 92 (HbA1c 5.4%) | Креатинин 0.88 (СКФ 98) | АЛТ 21 | ЛПНП 86 | Иммунитет к гепатиту B (Anti-HBs +).'
+            }
+          }
+        ]
+      }
+    ];
+
+    /**
+     * HELPER FUNCTIONS
+     */
+    function getProfile() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return { ...defaultProfile, ...JSON.parse(raw) };
+      } catch (e) {}
+      return { ...defaultProfile };
+    }
+
+    function calcBMI(hCm, wKg) {
+      const h = parseFloat(hCm) / 100;
+      const w = parseFloat(wKg);
+      if (!h || !w) return '18.8';
+      return (w / (h * h)).toFixed(1);
+    }
+
+    function calcBSA(hCm, wKg) {
+      const h = parseFloat(hCm);
+      const w = parseFloat(wKg);
+      if (!h || !w) return '1.63';
+      return Math.sqrt((h * w) / 3600).toFixed(2);
+    }
+
+    function dualText(multiObj) {
+      const main = multiObj[currentLang] || multiObj['en'] || multiObj['zh-TW'];
+      if (currentLang === 'zh-TW') return `<span>${main}</span>`;
+      return `<span>${main}</span><span class="bilingual-sub">🇹🇼 ${multiObj['zh-TW']}</span>`;
+    }
+
+    /**
+     * RENDER ENGINE
+     */
+    function renderCard() {
+      const ui = uiText[currentLang];
+      const profile = getProfile();
+      const bmi = calcBMI(profile.heightCm, profile.weightKg);
+      const bsa = calcBSA(profile.heightCm, profile.weightKg);
+
+      const displayName = (profile.name === defaultProfile.name)
+        ? (localizedNames[currentLang] || profile.name)
+        : profile.name;
+
+      const displayRole = (profile.role === defaultProfile.role)
+        ? (localizedRoles[currentLang] || profile.role)
+        : profile.role;
+
+      // Top bar labels
+      document.getElementById('ui-bilingual-label').textContent = bilingualMode ? ui.bilingualOn : ui.bilingualOff;
+      document.getElementById('ui-edit-label').textContent = ui.editBtn;
+      document.getElementById('ui-print-label').textContent = ui.printBtn;
+      document.getElementById('ui-tab-front').textContent = ui.tabFront;
+      document.getElementById('ui-tab-back').textContent = ui.tabBack;
+
+      // Front Face
+      document.getElementById('ui-flip-to-med').textContent = ui.flipToMed;
+      document.getElementById('ui-btn-qr').textContent = ui.btnQr;
+      document.getElementById('ui-btn-copy').textContent = ui.btnCopy;
+      document.getElementById('front-name').textContent = displayName;
+      document.getElementById('front-role').textContent = displayRole;
+      document.getElementById('front-bio').textContent = localizedBios[currentLang] || localizedBios['zh-TW'];
+      document.getElementById('ui-btn-vcard').textContent = ui.btnVcard;
+      document.getElementById('ui-btn-view-ice').textContent = ui.btnViewIce;
+
+      // Front Personal Biometric Chips (DOB 2003/12/16, 171cm / 55kg, BMI 18.8, Blood O+)
+      document.getElementById('front-chips-row').innerHTML = `
+        <span class="info-chip">🎂 ${ui.labels.dobAge}</span>
+        <span class="info-chip sage">📏 ${profile.heightCm} cm · ${profile.weightKg} kg (BMI ${bmi})</span>
+        <span class="info-chip blood">🩸 ${profile.bloodType}</span>
+      `;
+
+      // Front Contact Rows
+      const cleanPhone = profile.phone.replace(/[^+\d]/g, '');
+      document.getElementById('front-contact-grid').innerHTML = `
+        <a class="contact-row" href="tel:${cleanPhone}">
+          <div class="contact-row-left">
+            <div class="contact-icon-box">📞</div>
+            <div class="contact-meta">
+              <span class="contact-label">${ui.labels.phone}</span>
+              <div class="contact-value">${profile.phone}</div>
+            </div>
+          </div>
+          <span class="contact-action-hint">${ui.labels.callAction}</span>
+        </a>
+        <a class="contact-row" href="mailto:${profile.email}">
+          <div class="contact-row-left">
+            <div class="contact-icon-box sage">✉️</div>
+            <div class="contact-meta">
+              <span class="contact-label">${ui.labels.email}</span>
+              <div class="contact-value">${profile.email}</div>
+            </div>
+          </div>
+          <span class="contact-action-hint">${ui.labels.mailAction}</span>
+        </a>
+        <div class="contact-row" onclick="copyText('${profile.social}')">
+          <div class="contact-row-left">
+            <div class="contact-icon-box gold">💬</div>
+            <div class="contact-meta">
+              <span class="contact-label">${ui.labels.social}</span>
+              <div class="contact-value">${profile.social}</div>
+            </div>
+          </div>
+          <span class="contact-action-hint">${ui.labels.copyAction}</span>
+        </div>
+        <div class="contact-row" onclick="copyText('${profile.location}')">
+          <div class="contact-row-left">
+            <div class="contact-icon-box">📍</div>
+            <div class="contact-meta">
+              <span class="contact-label">${ui.labels.location}</span>
+              <div class="contact-value">${profile.location}</div>
+            </div>
+          </div>
+          <span class="contact-action-hint">${ui.labels.copyAction}</span>
+        </div>
+      `;
+
+      // Back Face (Emergency Medical Card)
+      document.getElementById('ui-back-title').textContent = ui.backTitle;
+      document.getElementById('ui-back-subtitle').textContent = ui.backSubtitle;
+      document.getElementById('ui-flip-to-front').textContent = ui.flipToFront;
+      document.getElementById('back-name').textContent = displayName;
+      document.getElementById('back-dob-sex').textContent = `🎂 ${profile.dob} (22 yrs) · Male`;
+
+      document.getElementById('back-biometric-strip').innerHTML = `
+        <div class="bio-cell">
+          <span class="bio-cell-label">${ui.labels.height}</span>
+          <div class="bio-cell-val">${profile.heightCm} cm</div>
+        </div>
+        <div class="bio-cell">
+          <span class="bio-cell-label">${ui.labels.weight}</span>
+          <div class="bio-cell-val">${profile.weightKg} kg</div>
+        </div>
+        <div class="bio-cell">
+          <span class="bio-cell-label">${ui.labels.bmiBsa}</span>
+          <div class="bio-cell-val">${bmi} / ${bsa}m²</div>
+        </div>
+        <div class="bio-cell blood-cell">
+          <span class="bio-cell-label">${ui.labels.blood}</span>
+          <div class="bio-cell-val">🩸 ${profile.bloodType}</div>
+        </div>
+      `;
+
+      // Back Allergies
+      document.getElementById('ui-back-allergy-title').textContent = ui.allergyTitle;
+      document.getElementById('ui-back-allergy-hint').textContent = ui.allergyHint;
+      document.getElementById('back-allergy-list').innerHTML = cardBackHighlights.allergies
+        .map(item => `<div>${dualText(item)}</div>`)
+        .join('');
+
+      // Back 4 Summary Mini Cards
+      document.getElementById('back-summary-grid').innerHTML = cardBackHighlights.summaryBoxes
+        .map(box => `
+          <div class="mini-med-card">
+            <h4>${box.title[currentLang] || box.title['zh-TW']}</h4>
+            <p style="white-space:pre-line;">${box.body[currentLang] || box.body['zh-TW']}</p>
+            ${currentLang !== 'zh-TW' ? `<span class="bilingual-sub" style="white-space:pre-line;">${box.body['zh-TW']}</span>` : ''}
+          </div>
+        `).join('');
+
+      // Back ICE Contact
+      document.getElementById('ui-ice-caption').textContent = ui.iceCaption;
+      document.getElementById('back-ice-name').textContent = profile.iceName;
+      document.getElementById('back-ice-phone').textContent = profile.icePhone;
+      document.getElementById('back-ice-call-link').href = `tel:${profile.icePhone.replace(/[^+\d]/g, '')}`;
+      document.getElementById('ui-ice-call-btn').textContent = ui.iceCallBtn;
+      document.getElementById('ui-btn-open-full').textContent = ui.btnOpenFull;
+
+      // Expandable Full Record Drawer
+      document.getElementById('ui-drawer-toggle-text').textContent = isDrawerOpen ? ui.drawerToggleOpen : ui.drawerToggleClosed;
+      document.getElementById('full-bento-grid').innerHTML = detailedDrawerSections.map(sec => `
+        <div class="detail-card col-6">
+          <div class="detail-card-header">
+            <div class="detail-card-title">
+              <span>${sec.icon}</span>
+              <div>${dualText(sec.title)}</div>
+            </div>
+          </div>
+          <div class="detail-list">
+            ${sec.items.map(it => `
+              <div class="detail-item">
+                <div class="detail-item-top">
+                  <div>${dualText(it.top)}</div>
+                  <span class="detail-badge">${it.badge}</span>
+                </div>
+                <div class="detail-item-desc">${dualText(it.desc)}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /**
+     * INTERACTIVE ACTIONS: FLIP, LANGUAGE, DRAWER, VCARD, QR CODE
+     */
+    function flipCard(toMedicalBack) {
+      isFlipped = toMedicalBack;
+      const scene = document.getElementById('card-scene');
+      const tabFront = document.getElementById('tab-front');
+      const tabBack = document.getElementById('tab-back');
+
+      scene.classList.toggle('is-flipped', isFlipped);
+      if (isFlipped) {
+        tabFront.classList.remove('active-front');
+        tabBack.classList.add('active-back');
+      } else {
+        tabBack.classList.remove('active-back');
+        tabFront.classList.add('active-front');
+      }
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('.lang-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+      renderCard();
+      showToast(`🌐 已切換為：${btnLabel(lang)}`);
+    }
+
+    function btnLabel(lang) {
+      const map = { 'zh-TW': '繁體中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어', 'vi': 'Tiếng Việt', 'th': 'ภาษาไทย', 'ru': 'Русский' };
+      return map[lang] || lang;
+    }
+
+    function toggleBilingual() {
+      bilingualMode = !bilingualMode;
+      document.body.classList.toggle('hide-bilingual', !bilingualMode);
+      document.getElementById('btn-bilingual').classList.toggle('active-bilingual', bilingualMode);
+      renderCard();
+    }
+
+    function toggleFullRecordDrawer(forceOpen) {
+      isDrawerOpen = typeof forceOpen === 'boolean' ? forceOpen : !isDrawerOpen;
+      const drawer = document.getElementById('full-record-drawer');
+      drawer.classList.toggle('open', isDrawerOpen);
+      document.getElementById('drawer-arrow').textContent = isDrawerOpen ? '▲' : '▼';
+      renderCard();
+      if (isDrawerOpen) {
+        drawer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Generate & Download Standard vCard (.vcf) with Embedded Medical Note
+    function downloadVCard() {
+      const p = getProfile();
+      const bmi = calcBMI(p.heightCm, p.weightKg);
+      const vcfLines = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'N:鄭;亦焜;;;',
+        `FN:${p.name}`,
+        `TITLE:${p.role}`,
+        'BDAY:2003-12-16',
+        `TEL;TYPE=CELL,VOICE:${p.phone}`,
+        `EMAIL;TYPE=INTERNET:${p.email}`,
+        `ADR;TYPE=WORK:;;${p.location};;;;`,
+        `NOTE:【隨身醫療急救資訊 ICE】生日: ${p.dob} (22歲) | 身高: ${p.heightCm}cm / 體重: ${p.weightKg}kg (BMI ${bmi}) | 血型: ${p.bloodType} | 過敏史: Penicillin(盤尼西林), NSAIDs(非類固醇止痛藥), 顯影劑 | 緊急聯絡人(ICE): ${p.iceName} (${p.icePhone})`,
+        'END:VCARD'
+      ];
+      const blob = new Blob([vcfLines.join('\r\n')], { type: 'text/vcard;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'YiKun_Cheng_鄭亦焜_Medical_vCard.vcf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('📥 已下載鄭亦焜的 vCard 通訊錄名片檔 (.vcf)');
+    }
+
+    function copyText(str) {
+      const temp = document.createElement('textarea');
+      temp.value = str;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showToast(`📋 已複製：${str}`);
+    }
+
+    function copyShareText() {
+      const p = getProfile();
+      const bmi = calcBMI(p.heightCm, p.weightKg);
+      const summary = [
+        `🪪 【數位電子名片 & 隨身醫療卡】`,
+        `姓名：${p.name}`,
+        `職稱：${p.role}`,
+        `生日：${p.dob} (22歲) | 身高體重：${p.heightCm}cm / ${p.weightKg}kg (BMI ${bmi}) | 血型：${p.bloodType}`,
+        `電話：${p.phone} | Email：${p.email}`,
+        `⚠️ 嚴重藥物過敏：Penicillin (盤尼西林)、NSAIDs (消炎止痛藥，可改用普拿疼 Acetaminophen)`,
+        `📞 緊急聯絡人 (ICE)：${p.iceName} ${p.icePhone}`
+      ].join('\n');
+      copyText(summary);
+    }
+
+    // Crisp deterministic SVG Matrix QR Badge for Modal
+    function openQRModal() {
+      const p = getProfile();
+      document.getElementById('qr-blood-text').textContent = p.bloodType;
+      const size = 21;
+      const seedStr = `${p.name}|${p.phone}|${p.dob}|171cm|55kg`;
+      let hash = 2166136261;
+      for (let i = 0; i < seedStr.length; i++) {
+        hash ^= seedStr.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+
+      const isFinder = (r, c) => {
+        const inTL = r < 7 && c < 7;
+        const inTR = r < 7 && c >= size - 7;
+        const inBL = r >= size - 7 && c < 7;
+        return inTL || inTR || inBL;
+      };
+
+      const finderPixel = (r, c, r0, c0) => {
+        const lr = r - r0;
+        const lc = c - c0;
+        if (lr === 0 || lr === 6 || lc === 0 || lc === 6) return true;
+        if (lr >= 2 && lr <= 4 && lc >= 2 && lc <= 4) return true;
+        return false;
+      };
+
+      let rects = '';
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          let on = false;
+          if (r < 7 && c < 7) on = finderPixel(r, c, 0, 0);
+          else if (r < 7 && c >= size - 7) on = finderPixel(r, c, 0, size - 7);
+          else if (r >= size - 7 && c < 7) on = finderPixel(r, c, size - 7, 0);
+          else if (!isFinder(r, c)) {
+            const v = ((r * 31 + c * 17 + (hash >>> ((r + c) % 16))) & 3);
+            on = v === 0 || v === 2;
+          }
+          if (on) {
+            rects += `<rect x="${c * 8 + 8}" y="${r * 8 + 8}" width="7" height="7" rx="1.8" fill="#2C2523"/>`;
+          }
+        }
+      }
+
+      const svg = `
+        <svg width="184" height="184" viewBox="0 0 184 184" xmlns="http://www.w3.org/2000/svg">
+          <rect width="184" height="184" rx="12" fill="#FFFFFF"/>
+          ${rects}
+          <rect x="72" y="72" width="40" height="40" rx="9" fill="#B86B4B" stroke="#FFFFFF" stroke-width="3"/>
+          <text x="92" y="98" text-anchor="middle" fill="#FFFDF9" font-size="18" font-weight="700" font-family="Noto Sans TC, sans-serif">鄭</text>
+        </svg>
+      `;
+      document.getElementById('qr-svg-container').innerHTML = svg;
+      document.getElementById('qr-modal').classList.add('open');
+    }
+
+    function closeQRModal() {
+      document.getElementById('qr-modal').classList.remove('open');
+    }
+
+    function openEditModal() {
+      const p = getProfile();
+      document.getElementById('edit-name').value = p.name;
+      document.getElementById('edit-role').value = p.role;
+      document.getElementById('edit-dob').value = p.dob;
+      document.getElementById('edit-height').value = p.heightCm;
+      document.getElementById('edit-weight').value = p.weightKg;
+      document.getElementById('edit-blood').value = p.bloodType;
+      document.getElementById('edit-phone').value = p.phone;
+      document.getElementById('edit-email').value = p.email;
+      document.getElementById('edit-social').value = p.social;
+      document.getElementById('edit-location').value = p.location;
+      document.getElementById('edit-ice-name').value = p.iceName;
+      document.getElementById('edit-ice-phone').value = p.icePhone;
+      document.getElementById('edit-modal').classList.add('open');
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.remove('open');
+    }
+
+    function saveProfile() {
+      const updated = {
+        name: document.getElementById('edit-name').value.trim() || defaultProfile.name,
+        role: document.getElementById('edit-role').value.trim() || defaultProfile.role,
+        dob: document.getElementById('edit-dob').value.trim() || defaultProfile.dob,
+        heightCm: document.getElementById('edit-height').value.trim() || defaultProfile.heightCm,
+        weightKg: document.getElementById('edit-weight').value.trim() || defaultProfile.weightKg,
+        bloodType: document.getElementById('edit-blood').value.trim() || defaultProfile.bloodType,
+        phone: document.getElementById('edit-phone').value.trim() || defaultProfile.phone,
+        email: document.getElementById('edit-email').value.trim() || defaultProfile.email,
+        social: document.getElementById('edit-social').value.trim() || defaultProfile.social,
+        location: document.getElementById('edit-location').value.trim() || defaultProfile.location,
+        iceName: document.getElementById('edit-ice-name').value.trim() || defaultProfile.iceName,
+        icePhone: document.getElementById('edit-ice-phone').value.trim() || defaultProfile.icePhone
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      } catch (e) {}
+      closeEditModal();
+      renderCard();
+      showToast('✅ 電子名片與急診資訊已儲存更新！');
+    }
+
+    function resetProfile() {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      closeEditModal();
+      renderCard();
+      showToast('已還原為鄭亦焜預設名片資料');
+    }
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    window.addEventListener('DOMContentLoaded', renderCard);
+  </script>
+</body>
+</html>
